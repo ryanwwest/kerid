@@ -1,2 +1,2 @@
 bootstrap_port = 1581
-primary_port = 1852
+primary_port = 1582

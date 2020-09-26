@@ -1,6 +1,6 @@
 import logging
 import asyncio
-from const import *
+from src.const import *
 from kademlia.network import Server
 
 def setup_logging():

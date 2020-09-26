@@ -1,6 +1,7 @@
 import logging
 import asyncio
-from const import *
+from api import API
+from src.const import *
 from kademlia.network import Server
 
 def setup_logging():
@@ -12,6 +13,7 @@ def setup_logging():
     log.setLevel(logging.DEBUG)
 
 async def run():
+    # setup_logging()
     # Create a node and start listening on port 5678
     node = Server()
     # todo don't expose default kademlia apis OR intercept them with code to disallow entry / verify, etc
@@ -22,8 +24,7 @@ async def run():
     # todo config value to pull this from
     await node.bootstrap([("0.0.0.0", bootstrap_port)])
 
-    await node.set("rwest", "best")
-    result = await node.get("rwest")
-    print(result)
+    api = API(node)
+    await api.run()
 
 asyncio.run(run())
