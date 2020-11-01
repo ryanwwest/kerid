@@ -17,18 +17,17 @@ async def get_id_with_aid(aid):
 
 @app.route('/id/<aid>/<witness_id>', methods=['POST'])
 async def publish_aid_id_mapping(aid, witness_id):
-    # todo verify
+    # todo verify that the aid and witness_id are valid
     await node.set(aid, witness_id)
     return jsonify("done")
 
 @app.route('/ip/<witness_id>')
 async def get_ip_with_id(witness_id):
-    # todo verify
     ip = await node.get(witness_id)
     return jsonify(ip)
 
 @app.route('/ip/<witness_id>/<witness_ip>', methods=['POST'])
 async def publish_id_ip_mapping(witness_id, witness_ip):
-    # todo verify
+    # todo verify that the ip is signed by the witness and the witness_id is valid(?)
     await node.set(witness_id, witness_ip)
     return jsonify("done")

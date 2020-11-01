@@ -1,4 +1,3 @@
-
 import nest_asyncio
 import pytest
 import kademlia.network
@@ -6,8 +5,6 @@ import api
 from const import *
 from generate_aid import gen_notransfer_serialized_aid, gen_serialized_aid
 
-
-# TODO move to actual test suite
 @pytest.mark.asyncio
 async def test_api():
     tc = await setup_test_client()
