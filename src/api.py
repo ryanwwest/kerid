@@ -1,22 +1,34 @@
+from quart import Quart, jsonify
+import asyncio
 
-# TODO add actual Flask API
-class API:
+app = Quart(__name__)
+node = None
 
-    def __init__(self, node):
-        self.node = node
+def run_api(kademlia_node):
+    global node
+    node = kademlia_node
+    app.run(loop=asyncio.get_event_loop())
 
-    async def publish_aid_id_mapping(self, aid, witness_id):
-        await self.node.set(aid, witness_id)
+@app.route('/id/<aid>')
+async def get_id_with_aid(aid):
+    # todo verify
+    id = await node.get(aid)
+    return jsonify(id)
 
-    async def publish_id_ip_mapping(self, witness_id, witness_ip):
-        # todo verify witness ip is signed
-        await self.node.set(witness_id, witness_ip)
+@app.route('/id/<aid>/<witness_id>', methods=['POST'])
+async def publish_aid_id_mapping(aid, witness_id):
+    # todo verify
+    await node.set(aid, witness_id)
+    return jsonify("done")
 
-    async def query_with_aid(self, aid):
-        # todo cache manager to optionally return a key event log (KEL) instead of the id if that is cached
-        result = await self.node.get(aid)
-        return result
+@app.route('/ip/<witness_id>')
+async def get_ip_with_id(witness_id):
+    # todo verify
+    ip = await node.get(witness_id)
+    return jsonify(ip)
 
-    async def query_with_witness_id(self, witness_id):
-        result = await self.node.get(witness_id)
-        return result
+@app.route('/ip/<witness_id>/<witness_ip>', methods=['POST'])
+async def publish_id_ip_mapping(witness_id, witness_ip):
+    # todo verify
+    await node.set(witness_id, witness_ip)
+    return jsonify("done")

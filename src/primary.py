@@ -2,13 +2,16 @@ import asyncio
 import logging
 
 import kademlia.network
+import api
+import nest_asyncio
 
-from api import API
 import test
+
 
 
 from src.const import *
 
+node = None
 
 def setup_logging():
     handler = logging.StreamHandler()
@@ -18,7 +21,8 @@ def setup_logging():
     log.addHandler(handler)
     log.setLevel(logging.DEBUG)
 
-async def run():
+async def connect():
+    global node
     # setup_logging()
 
     # Create a node and start listening on port 5678
@@ -32,9 +36,11 @@ async def run():
     await node.bootstrap([("0.0.0.0", bootstrap_port)])
     print("connected.")
 
-    api = API(node)
+    await node.set("heart", "beat")
+    beat = await node.get("heart")
+    assert beat == "beat"
 
-    await test.test_api(api)
+    api.run_api(node)
 
-asyncio.run(run())
-
+nest_asyncio.apply()
+asyncio.run(connect())

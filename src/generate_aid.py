@@ -8,21 +8,6 @@ from keri.core.eventing import Kever
 from keri.core.eventing import incept
 from keri.db.dbing import openLogger
 
-
-# TODO move to actual test suite
-async def test_api(api):
-    witness_id = gen_notransfer_serialized_aid()
-    aid = gen_serialized_aid([witness_id])
-    # TODO witness_aid.sign_ip("1.2.3.4") when implemented
-    witness_ip = "signed_ip1"
-    await api.publish_aid_id_mapping(aid, witness_id)
-    await api.publish_id_ip_mapping(witness_id, witness_ip)
-
-    assert witness_id == await api.query_with_aid(aid)
-    assert witness_ip == await api.query_with_witness_id(witness_id)
-    print('api works')
-
-
 # used to generate witness prefixes
 def gen_notransfer_serialized_aid():
     with openLogger() as lgr:
